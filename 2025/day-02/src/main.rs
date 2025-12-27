@@ -1,15 +1,35 @@
 
 fn part_one(counter: &mut i64, value: i64) {
     let string = value.to_string();
-    if string.len() % 2 == 0 {
-        let (first, last) = string.split_at(string.len() / 2);
-        if first == last {
-            *counter += value;
-        }
+
+    if string.len() % 2 != 0 {
+        return;
+    }
+
+    let (first, last) = string.split_at(string.len() / 2);
+
+    if first == last {
+        *counter += value;
     }
 }
 
-fn part_two(counter: &i32, value: i32) {
+fn part_two(counter: &mut i64, value: i64) {
+    let string = value.to_string();
+    let len = string.len();
+
+    for size in 1..=len / 2 {
+        if len % size != 0 {
+            continue;
+        }
+
+        let (substr, _) = string.split_at(size);
+        let duplicate = substr.repeat(len / size);
+
+        if string == duplicate {
+            *counter += value;
+            return;
+        }
+    }
 }
 
 fn main() {
@@ -29,7 +49,7 @@ fn main() {
 
     for bound in bounds.iter() {
         for value in bound.0..=bound.1 {
-            part_one(&mut counter, value);
+            part_two(&mut counter, value);
         }
     }
 
